@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+	{{parent()}}Produit
+{% endblock %}
+{% block body %}
+
+	<h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold">{{produit.libelle}}</h1>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm">
+				<img class="img-fluid " src="img/{{produit.image}}">
+			</br>
+		</div>
+		<div class="col-sm"></br>
+		<p class=" text-primary fs-2 fw-bold">Prix : </p>
+		{{produit.prix}}€
+	</br>
+</br>
+
+
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">      
+<p class=" text-primary fs-2 fw-bold">Description : </p> 
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+      <p class="fw-normal"> {{produit.description | raw}} </p>
+      </div>
+    </div>
+  </div>
+  
+<div class="col-sm">
+</br>
+<div class="row-cols-md-2">
+<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Ajouter au panier</button>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas-header">
+<h5 id="offcanvasRightLabel">
+	<Offcanvas right>C'est tout bon !</h5>
+  
+	<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+	Votre produit a été ajouté au panier
+</div>
+</div>
+</br>
+</br>
+<button type="button" class="btn btn-outline-danger">
+<i class="bi bi-heart"></i></button></div></div></div></div></div>{% endblock %}

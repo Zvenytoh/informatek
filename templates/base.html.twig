@@ -11,6 +11,7 @@
 			<link href="https://bootswatch.com/5/lux/bootstrap.min.css" rel="stylesheet">
 			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrapicons.css">
 			<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+			<link rel="stylesheet" href= {{asset("public/css/produit.css")}}>
 		{% endblock %}
 	</head>
 	<body>
@@ -54,22 +55,25 @@
 								<a class="dropdown-item" href="{{path('app_tel_oneplus')}}">One PLus</a>
 							</div>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{path('app_about')}}">A propos</a>
+						{# <li class="nav-item">
+							<a class="nav-link" href="{{path('app_about')}}">About</a>
 						</li>
+						#}
 						<li class="nav-item">
 							<a class="nav-link" href="{{path('app_contact')}}">Contact</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{path('app_favori')}}">
-								<i class="bi bi-bag-heart"></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{path('app_panier')}}">
-								<i class="bi bi-cart"></i>
-							</a>
-						</li>
+						{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('app_favori')}}">
+									<i class="bi bi-bag-heart"></i>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('app_panier')}}">
+									<i class="bi bi-cart"></i>
+								</a>
+							</li>
+						{% endif %}
 					</div>
 				</li>
 			</ul>
@@ -77,14 +81,27 @@
 				<input class="form-control me-sm-2" type="search" placeholder="Search">
 				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
 			</form>
+			<ul class="navbar-nav me-auto">
+				{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{path('app_login')}}">Se connecter
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{path('app_register')}}">S'inscrire
+						</a>
+					</li>
+				{% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{path('app_logout')}}">
+							{{app.user.email}}
+							<i class="bi bi-x-circle-fill"></i>
+						</a>
+					</li>
+				{% endif %}
 
-		</div>
-
+			</div>
+		</body>
 	</body>
-</html></div></nav>
-{% for message in app.flashes('notice') %}
-<h2 class="alert alert-warning text-center mt-4 mb-4" role="alert">
-{{ message }}
-</h2>
-{% endfor %}
-{% block body %}Informatek{% endblock %}{% block javascripts %}<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>{% endblock %}</body></html>
+</html></div></nav>{% for message in app.flashes('notice') %}<h2 class="alert alert-warning text-center mt-4 mb-4" role="alert">
+{{ message }}</h2>{% endfor %}{% block body %}Informatek{% endblock %}{% block javascripts %}<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>{% endblock %}</body></html>

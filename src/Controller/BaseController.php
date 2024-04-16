@@ -9,13 +9,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Form\ChercherType;
+
 
 class BaseController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function home(): Response
+    public function home(Request $request, EntityManagerInterface $em): Response
     {
+        $form = $this->createForm(ChercherType::class);
+        if ($request->isMethod('POST')) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $mot = $form->get('chercher')->getData();
+            return $this->redirectToRoute('app_search', ['mot'=> $mot]);
+        }
+        }
         return $this->render('base/home.html.twig', [
+
+       'form'=> $form->createView(),
         ]);
     }
     #[Route('/about', name: 'app_about')]
@@ -50,6 +62,7 @@ class BaseController extends AbstractController
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
+                $contact->setDateEnvoi(new \Datetime());
                 $em->persist($contact);
                 $em->flush();
 
@@ -68,6 +81,15 @@ class BaseController extends AbstractController
     {
         return $this->render('base/favori.html.twig', [
 
+        ]);
+    }
+    #[Route('/search/{mot}', name: 'app_search')]
+
+    public function search(Request $request, EntityManagerInterface $em): Response
+    {
+        $mot = $request->get('mot');
+        return $this->render('base/search.html.twig', [
+            'mot'=> $mot,
         ]);
     }
 }

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{parent()}}Accueil{% endblock %}
+{% block body %}
+ <h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold"> Ajouter produit </h1>
+ <div class="container-fluid">
+ <div class="row justify-content-center">
+ <div class="col-10 text-primary">
+ {{ form_start(form) }}
+ {{ form_row(form.libelle) }}
+{{ form_row(form.prix) }}
+{{ form_row(form.description) }}
+{{ form_row(form.marque) }}
+{{ form_row(form.image) }}
+{{ form_end(form) }}
+</div>
+ </div>
+</div>
+{% endblock %}
