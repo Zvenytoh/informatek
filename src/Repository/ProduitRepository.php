@@ -36,13 +36,13 @@ class ProduitRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-       public function recherche($value): array
-     {
-         $qb = $this->createQueryBuilder('p');
-             $qb->andWhere($qb ->expr()->like('p.libelle', 'value'))
-                ->setParameter('value', '%' .$value. '%')
-                ->orderBy('p.id','ASC');
-              return $qb->getQuery()->getResult();
-          ;
-   }
+    public function findBySearchQuery(string $query)
+    {
+        return $this->createQueryBuilder('p')
+        ->where('p.libelle LIKE :query OR p.description LIKE :query')
+        ->setParameter('query', '%'.$query.'%')
+        ->getQuery()
+        ->getResult();
+    }
+
 }

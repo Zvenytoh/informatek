@@ -2,4 +2,47 @@
 {% block title %}{{parent()}}Favoris{% endblock %}
 {% block body %}
  <h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold"> Favoris </h1>
-{% endblock %}
+ 
+
+<div class="row justify-content-center pt-5">
+		<div>
+			<div class"card-group g-4 pt-4">
+				<div class="row row-cols-md-5 g-4 pt-4">
+					 {% for produit in app.user.produitsAdorer %}
+			
+							<div class="col">
+								<div class="card" style="width: 18rem; border: none;">
+									<a href="{{path('app_produit', {'id':produit.id})}}"><img class="card-img-top" src="img/{{produit.image}}" alt="Card image cap"> </a>
+									<div class="card-body">
+										<h5 class="card-title">{{produit.libelle}}</h5>
+										<p class="card-text">{{produit.prix}}€</p>
+										<div class="row row-cols-md-1">
+											<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Ajouter au panier</button>
+											<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+												<div class="offcanvas-header">
+													<h5 id="offcanvasRightLabel">
+														<Offcanvas right>C'est tout bon !</h5>
+														<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+													</div>
+													<div class="offcanvas-body">
+														Votre produit a été ajouté au panier
+													</div>
+												</div>
+												<a href="{{path('app_favoris_produit',{'id':produit.id})}}" role="button">
+												<div class="d-flex justify-content-center w-100% p-2">
+												<button type="button" class="btn btn-outline-danger">	
+													<i class=" bi bi-heart-fill " title="adorer" ></i>
+												</button>
+												</div>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endblock %}

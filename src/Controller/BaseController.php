@@ -10,24 +10,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\ChercherType;
-
+use App\Repository\ProduitRepository;
+use App\Entity\Produit;
 
 class BaseController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function home(Request $request, EntityManagerInterface $em): Response
+    #[Route('/', name: 'app_accueil')]
+    public function index(ProduitRepository $ProduitRepository): Response
     {
-        $form = $this->createForm(ChercherType::class);
-        if ($request->isMethod('POST')) {
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $mot = $form->get('chercher')->getData();
-            return $this->redirectToRoute('app_search', ['mot'=> $mot]);
-        }
-        }
+        $produits = $ProduitRepository->findAll();
+        shuffle($produits);
         return $this->render('base/home.html.twig', [
+            'controller_name' => 'BaseController',
+            'produits'=>$produits,
 
-       'form'=> $form->createView(),
         ]);
     }
     #[Route('/about', name: 'app_about')]
@@ -83,13 +79,16 @@ class BaseController extends AbstractController
 
         ]);
     }
-    #[Route('/search/{mot}', name: 'app_search')]
-
-    public function search(Request $request, EntityManagerInterface $em): Response
+    #[Route('/search', name: 'app_search')]
+    public function search(Request $request, ProduitRepository $produitRepository): Response
     {
-        $mot = $request->get('mot');
+        $query = $request->query->get('q');
+        $produits = $produitRepository->findBySearchQuery($query);
+
         return $this->render('base/search.html.twig', [
-            'mot'=> $mot,
+            'produits' => $produits,
+            'query' => $query,
         ]);
     }
 }
+

@@ -12,24 +12,25 @@ use App\Entity\Produit;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\ProduitType;
 use App\Repository\ProduitRepository;
+use App\Entity\User;
 
 class ProduitController extends AbstractController
 {
-    #[Route('/add-produit', name: 'app_produit')]
+    #[Route('/add-produit', name: 'app_add_produit')]
     public function addProduit(Request $request, EntityManagerInterface $em): Response
     {
         $produit = new Produit();
-            $form = $this->createForm(AjoutProduitType::class, $produit);
-            if($request->isMethod('POST')){
-                $form->handleRequest($request);
-                if ($form->isSubmitted()&&$form->isValid()){
-                    $em->persist($produit);
-                    $em->flush();
-                    $this->addFlash('notice','Produit ajouté');
-                    return $this->redirectToRoute('app_produit');
-                }
-                }
-        return $this->render('produit/add-produit.html.twig', [
+        $form = $this->createForm(AjoutProduitType::class, $produit);
+        if($request->isMethod('POST')){
+            $form->handleRequest($request);
+            if ($form->isSubmitted()&&$form->isValid()){
+                $em->persist($produit);
+                $em->flush();
+                $this->addFlash('notice','Type de Produit ajouté');
+                return $this->redirectToRoute('app_add_produit_type');
+            }
+            }
+        return $this->render('produit/add-produit-type.html.twig', [
             'form'=> $form->createView(),
         ]);
     }
@@ -75,4 +76,30 @@ class ProduitController extends AbstractController
             'produit' => $produit,
         ]);
     }
+    #[Route('/private-favoris-produit/{id}', name: 'app_favoris_produit')]
+    public function favoris(Produit $produit,EntityManagerInterface $em,Request $request): Response
+    {
+       if ($this->getUser()->getProduitsAdorer()->contains($produit)) {
+        $this->getUser()->removeProduitsAdorer($produit);
+       } else {
+        $this->getUser()->addProduitsAdorer($produit);
+       }
+       $em->persist($this->getUser());
+       $em->flush();
+       $referer = $request->headers->get('referer');
+       return $this->redirect($referer);
+    }
+
+    #[Route('/private-suppfavoris/{id}', name: 'app_suppfav')]
+    public function suppfav(Produit $produit,EntityManagerInterface $em,Request $request): Response
+    {
+        if ($this->getUser()->getfavoris()->contains($produit)) {
+            $this->getUser()->removeFavori($produit);
+        }
+        $em->persist($this->getUser());
+        $em->flush();
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
+    }
+
 }

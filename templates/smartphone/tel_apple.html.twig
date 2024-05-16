@@ -1,11 +1,8 @@
 {% extends 'base.html.twig' %}
-{% block title %}
-	{{parent()}}Accueil
-{% endblock %}
+{% block title %}{{parent()}}Accueil{% endblock %}
 {% block body %}
-
-	<h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold">
-		Smartphone Apple
+ <h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold"> Iphone </h1>
+ </h1>
 	</h1>
 	<div class="row justify-content-center pt-5">
 		<div>
@@ -15,7 +12,7 @@
 						{% if t.marque == 'Apple' %}
 							<div class="col">
 								<div class="card" style="width: 18rem; border: none;">
-									<a href="{{path('app_produit', {'id':t.id})}}"><img class="card-img-top" src="img/{{t.image}}" alt="Card image cap">
+									<a href="{{path('app_produit', {'id':t.id})}}"><img class="card-img-top" src="img/{{t.image}}" alt="Card image cap"> </a>
 									<div class="card-body">
 										<h5 class="card-title">{{t.libelle}}</h5>
 										<p class="card-text">{{t.prix}}€</p>
@@ -31,9 +28,13 @@
 														Votre produit a été ajouté au panier
 													</div>
 												</div>
-												<button type="button" class="btn btn-outline-danger">
-													<i class="bi bi-heart"></i>
+												<a href="{{path('app_favoris_produit',{'id':t.id})}}" role="button">
+												<div class="d-flex justify-content-center w-100% p-2">
+												<button type="button" class="btn btn-outline-danger">	
+													<i class=" bi-heart " title="adorer" ></i>
 												</button>
+												</div>
+												</a>
 											</div>
 										</div>
 									</div>
